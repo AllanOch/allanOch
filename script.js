@@ -6,7 +6,7 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 let musicStarted = false;
 
 const player = { x: 50, y: 540, width: 28, height: 46, vx: 0, vy: 0, onGround: false };
-const enemy = { x: 640, y: 80, width: 64, height: 84 };
+const enemy = { x: 640, y: 80, width: 64, height: 84, vx: 1 };
 const gravity = 0.7;
 const speed = 4;
 const jumpPower = -14;
@@ -135,6 +135,12 @@ function update() {
         player.y = canvas.height - player.height;
         player.vy = 0;
         player.onGround = true;
+    }
+
+    // Enemy movement
+    enemy.x += enemy.vx;
+    if (enemy.x < 0 || enemy.x + enemy.width > canvas.width) {
+        enemy.vx = -enemy.vx;
     }
 
     player.onGround = false;
