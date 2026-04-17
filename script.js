@@ -227,27 +227,38 @@ function draw() {
         }
     });
 
-    // Player spaceship
-    ctx.fillStyle = '#0f0';
+    // Player robot
+    ctx.fillStyle = '#666'; // Robot body
+    ctx.fillRect(player.x, player.y + 10, 28, 26); // body
+    ctx.fillRect(player.x + 8, player.y, 12, 12); // head
+    ctx.fillRect(player.x - 4, player.y + 12, 6, 16); // left arm
+    ctx.fillRect(player.x + 26, player.y + 12, 6, 16); // right arm
+    ctx.fillRect(player.x + 4, player.y + 36, 6, 10); // left leg
+    ctx.fillRect(player.x + 18, player.y + 36, 6, 10); // right leg
+
+    // MaTs inside the robot
+    ctx.fillStyle = '#00aa00';
     ctx.beginPath();
-    ctx.moveTo(player.x + 14, player.y);
-    ctx.lineTo(player.x, player.y + 20);
-    ctx.lineTo(player.x + 28, player.y + 20);
-    ctx.closePath();
+    ctx.arc(player.x + 14, player.y + 6, 4, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillRect(player.x + 12, player.y + 20, 4, 10); // thruster
-    ctx.fillRect(player.x + 16, player.y + 20, 4, 10);
     ctx.fillStyle = '#fff';
     ctx.font = '10px Arial';
     ctx.fillText('MaTs', player.x + 5, player.y - 2);
 
-    // Enemy alien
-    ctx.fillStyle = '#f00';
-    ctx.fillRect(enemy.x + 10, enemy.y + 10, 44, 30); // body
-    ctx.fillRect(enemy.x + 20, enemy.y, 24, 10); // head
-    ctx.fillStyle = '#0f0'; // eyes
-    ctx.fillRect(enemy.x + 24, enemy.y + 2, 4, 4);
-    ctx.fillRect(enemy.x + 32, enemy.y + 2, 4, 4);
+    // Enemy robot
+    ctx.fillStyle = '#c0392b'; // Robot body
+    ctx.fillRect(enemy.x, enemy.y + 10, 64, 54); // body
+    ctx.fillRect(enemy.x + 24, enemy.y, 16, 16); // head
+    ctx.fillRect(enemy.x - 8, enemy.y + 12, 12, 32); // left arm
+    ctx.fillRect(enemy.x + 60, enemy.y + 12, 12, 32); // right arm
+    ctx.fillRect(enemy.x + 16, enemy.y + 64, 12, 20); // left leg
+    ctx.fillRect(enemy.x + 36, enemy.y + 64, 12, 20); // right leg
+
+    // Christian inside the robot
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(enemy.x + 32, enemy.y + 8, 6, 0, Math.PI * 2);
+    ctx.fill();
     ctx.fillStyle = '#000';
     ctx.font = '12px Arial';
     ctx.fillText('Christian', enemy.x + 10, enemy.y - 2);
