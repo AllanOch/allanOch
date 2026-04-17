@@ -17,6 +17,7 @@ let dildos = [];
 let canDisabled = false;
 let enemyHits = 0;
 let canSize = 10;
+let dildoCount = 0;
 
 const platforms = [
     { x: 0, y: 580, width: 800, height: 20 },
@@ -24,12 +25,14 @@ const platforms = [
     { x: 180, y: 340, width: 440, height: 16 },
     { x: 100, y: 220, width: 520, height: 16 },
     { x: 180, y: 100, width: 440, height: 16 },
+    { x: 80, y: -20, width: 640, height: 16 },
 ];
 
 const ladders = [
     { x: 120, y: 240, width: 40, height: 220 },
     { x: 520, y: 360, width: 40, height: 220 },
     { x: 120, y: 120, width: 40, height: 100 },
+    { x: 120, y: 0, width: 40, height: 120 },
 ];
 
 const keys = { left: false, right: false, up: false };
@@ -45,6 +48,7 @@ function resetGame() {
     canTimer = 0;
     enemyHits = 0;
     canSize = 10;
+    dildoCount = 0;
     enemy.vx = 2;
     messageElem.textContent = 'MaTs må unngå ølboksene!';
     updateScore();
@@ -101,6 +105,13 @@ function createCan() {
 }
 
 function createDildo() {
+    dildoCount++;
+    if (dildoCount % 5 === 0) {
+        messageElem.textContent = 'Hei Hei!';
+        setTimeout(() => {
+            messageElem.textContent = 'MaTs må unngå ølboksene!';
+        }, 500);
+    }
     const startX = player.x + player.width / 2;
     const startY = player.y + player.height / 2;
     const targetX = enemy.x + enemy.width / 2;
