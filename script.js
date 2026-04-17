@@ -53,18 +53,18 @@ function startMusic() {
     const gain = audioCtx.createGain();
     gain.gain.value = 0.04;
     const osc = audioCtx.createOscillator();
-    osc.type = 'square';
-    osc.frequency.value = 110;
+    osc.type = 'sawtooth';
+    osc.frequency.value = 165;
     osc.connect(gain);
     gain.connect(audioCtx.destination);
     osc.start();
 
-    const notes = [110, 132, 156, 104, 124, 148, 176, 130];
+    const notes = [165, 196, 220, 247, 262, 247, 220, 196, 165];
     let index = 0;
     setInterval(() => {
         osc.frequency.setValueAtTime(notes[index % notes.length], audioCtx.currentTime);
         index += 1;
-    }, 250);
+    }, 300);
 }
 
 function playScream() {
