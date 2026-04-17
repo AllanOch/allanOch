@@ -6,7 +6,7 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 let musicStarted = false;
 
 const player = { x: 50, y: 540, width: 28, height: 46, vx: 0, vy: 0, onGround: false };
-const enemy = { x: 640, y: 80, width: 64, height: 84, vx: 1 };
+const enemy = { x: 640, y: 20, width: 64, height: 84, vx: 2 };
 const gravity = 0.7;
 const speed = 4;
 const jumpPower = -14;
@@ -15,17 +15,20 @@ let canTimer = 0;
 let cans = [];
 let dildos = [];
 let canDisabled = false;
+let enemyHits = 0;
 
 const platforms = [
     { x: 0, y: 580, width: 800, height: 20 },
     { x: 100, y: 460, width: 520, height: 16 },
     { x: 180, y: 340, width: 440, height: 16 },
     { x: 100, y: 220, width: 520, height: 16 },
+    { x: 180, y: 100, width: 440, height: 16 },
 ];
 
 const ladders = [
     { x: 120, y: 240, width: 40, height: 220 },
     { x: 520, y: 360, width: 40, height: 220 },
+    { x: 120, y: 120, width: 40, height: 100 },
 ];
 
 const keys = { left: false, right: false, up: false };
@@ -39,6 +42,7 @@ function resetGame() {
     score = 0;
     cans = [];
     canTimer = 0;
+    enemyHits = 0;
     messageElem.textContent = 'MaTs må unngå ølboksene!';
     updateScore();
 }
@@ -187,8 +191,14 @@ function update() {
         if (Math.sqrt(distX * distX + distY * distY) < dildo.radius + 30) {
             canDisabled = true;
             setTimeout(() => canDisabled = false, 3000);
+            enemyHits++;
+            if (enemyHits >= 10) {
+                alert('MaTs vant! Christian er død!');
+                resetGame();
+                return;
+            }
             dildos.splice(dildos.indexOf(dildo), 1);
-            messageElem.textContent = 'Christian er forvirret!';
+            messageElem.textContent = `Christian er forvirret! Treff: ${enemyHits}/10`;
         }
     });
 
@@ -297,5 +307,8 @@ window.addEventListener('keyup', event => {
     if (event.code === 'ArrowUp') keys.up = false;
 });
 
-resetGame();
-loop();
+document.getElementById('startButton').addEventListener('click', () => {
+    document.getElementById('startButton').style.display = 'none';
+    resetGame();
+    loop();
+});
