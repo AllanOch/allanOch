@@ -249,8 +249,27 @@ function draw() {
     }
     ctx.shadowBlur = 0;
 
-    ctx.fillStyle = '#666';
-    platforms.forEach(platform => ctx.fillRect(platform.x, platform.y, platform.width, platform.height));
+    // Draw brick platforms
+    platforms.forEach(platform => {
+        const brickWidth = 30;
+        const brickHeight = 16;
+        for (let row = 0; row < Math.ceil(platform.height / brickHeight); row++) {
+            for (let col = 0; col < Math.ceil(platform.width / brickWidth); col++) {
+                const offset = (row % 2) * (brickWidth / 2);
+                const x = platform.x + col * brickWidth + offset;
+                const y = platform.y + row * brickHeight;
+                
+                // Brick color
+                ctx.fillStyle = '#8B4513';
+                ctx.fillRect(x, y, brickWidth - 2, brickHeight - 2);
+                
+                // Brick mortar/outline
+                ctx.strokeStyle = '#A0522D';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(x, y, brickWidth - 2, brickHeight - 2);
+            }
+        }
+    });
 
     ctx.fillStyle = '#00f'; // Blue ladders as force fields
     ladders.forEach(ladder => {
