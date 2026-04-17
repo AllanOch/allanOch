@@ -13,6 +13,8 @@ const jumpPower = -14;
 let score = 0;
 let canTimer = 0;
 let cans = [];
+let dildos = [];
+let canDisabled = false;
 
 const platforms = [
     { x: 0, y: 580, width: 800, height: 20 },
@@ -91,6 +93,16 @@ function createCan() {
     messageElem.textContent = 'Christian skriker mens han kaster!';
 }
 
+function createDildo() {
+    const startX = player.x + player.width / 2;
+    const startY = player.y + player.height / 2;
+    const targetX = enemy.x + enemy.width / 2;
+    const targetY = enemy.y + enemy.height / 2;
+    const dx = (targetX - startX) / 40;
+    const dy = (targetY - startY) / 40;
+    dildos.push({ x: startX, y: startY, radius: 8, vx: dx, vy: dy });
+}
+
 function collideRect(a, b) {
     return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
 }
@@ -143,7 +155,7 @@ function update() {
     }
 
     canTimer += 1;
-    if (canTimer > 70) {
+    if (canTimer > 70 && !canDisabled) {
         createCan();
         canTimer = 0;
     }
@@ -155,6 +167,24 @@ function update() {
     });
 
     cans = cans.filter(can => can.y < canvas.height + 50 && can.x > -50 && can.x < canvas.width + 50);
+
+    dildos.forEach(dildo => {
+        dildo.x += dildo.vx;
+        dildo.y += dildo.vy;
+    });
+
+    dildos = dildos.filter(dildo => dildo.y > -50 && dildo.y < canvas.height + 50 && dildo.x > -50 && dildo.x < canvas.width + 50);
+
+    dildos.forEach(dildo => {
+        const distX = dildo.x - (enemy.x + enemy.width / 2);
+        const distY = dildo.y - (enemy.y + enemy.height / 2);
+        if (Math.sqrt(distX * distX + distY * distY) < dildo.radius + 30) {
+            canDisabled = true;
+            setTimeout(() => canDisabled = false, 3000);
+            dildos.splice(dildos.indexOf(dildo), 1);
+            messageElem.textContent = 'Christian er forvirret!';
+        }
+    });
 
     cans.forEach(can => {
         const distX = can.x - (player.x + player.width / 2);
@@ -220,6 +250,13 @@ function draw() {
         ctx.fillStyle = '#555';
         ctx.fillRect(can.x - 6, can.y - 12, 12, 6);
     });
+
+    dildos.forEach(dildo => {
+        ctx.fillStyle = '#ff69b4';
+        ctx.beginPath();
+        ctx.arc(dildo.x, dildo.y, dildo.radius, 0, Math.PI * 2);
+        ctx.fill();
+    });
 }
 
 function loop() {
@@ -232,6 +269,10 @@ window.addEventListener('keydown', event => {
     if (event.code === 'ArrowLeft') keys.left = true;
     if (event.code === 'ArrowRight') keys.right = true;
     if (event.code === 'ArrowUp') keys.up = true;
+    if (event.code === 'Space') {
+        createDildo();
+        event.preventDefault();
+    }
 });
 window.addEventListener('keyup', event => {
     if (event.code === 'ArrowLeft') keys.left = false;
